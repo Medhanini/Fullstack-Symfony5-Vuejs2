@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Symfony\Component\HttpFoundation\JsonResponse; 
 use App\Entity\Customer;
 use App\Form\CustomerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,23 +22,39 @@ class CustomerController extends AbstractApiController
     //         'path' => 'src/Controller/CustomerController.php',
     //     ]);
     // }
-    public function indexAction(Request $request):Response
+    public function indexAction(Request $request):JsonResponse
     {
         $customers = $this->getDoctrine()->getRepository(Customer::class)->findAll();
-        return $this->json($customers);
+        $formatted = [];
+        foreach ($customers as $customer) {
+            $formatted[] = [
+            'id' => $customer->getId(),
+            'email' => $customer->getEmail(),
+            'PhoneNumber' => $customer->getPhoneNumber(),
+            ];
+        }
+
+        return new JsonResponse($formatted);
     }
-    public function createAction(Request $request):Response
+    public function createAction(Request $request):JsonResponse
     {
         $form = $this->buildForm(CustomerType::class);
         $form->handleRequest($request);
-        if(!$form->isSubmitted() || $form->isValid()){
-            print'Error';
+        if(!$form->isSubmitted() || !$form->isValid()){
+            print'Form is not valid';
             exit;
         }
         /** @var Customer $customer */
         $customer = $form->getData();
         $this->getDoctrine()->getManager()->persist($customer);
         $this->getDoctrine()->getManager()->flush();
-        return $this->json('');
+        $formatted = [];
+            $formatted[] = [
+            'id' => $customer->getId(),
+            'email' => $customer->getEmail(),
+            'PhoneNumber' => $customer->getPhoneNumber(),
+            ];
+
+        return new JsonResponse($formatted);
     }
 }
