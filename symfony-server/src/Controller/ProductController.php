@@ -1,24 +1,24 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\Customer;
-use App\Form\Type\CustomerType;
+
+use App\Entity\Product;
+use App\Form\Type\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomerController extends AbstractApiController
-
+class ProductController extends AbstractApiController
 {
     public function indexAction(Request $request): Response
     {
-        $customers = $this->getDoctrine()->getRepository(Customer::class)->findAll();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
 
-        return $this->respond($customers);
+        return $this->respond($products);
     }
 
     public function createAction(Request $request): Response
     {
-        $form = $this->buildForm(CustomerType::class);
+        $form = $this->buildForm(ProductType::class);
 
         $form->handleRequest($request);
 
@@ -26,12 +26,12 @@ class CustomerController extends AbstractApiController
             return $this->respond($form, Response::HTTP_BAD_REQUEST);
         }
 
-        /** @var Customer $customer */
-        $customer = $form->getData();
+        /** @var Product $product */
+        $product = $form->getData();
 
-        $this->getDoctrine()->getManager()->persist($customer);
+        $this->getDoctrine()->getManager()->persist($product);
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->respond($customer);
+        return $this->respond($product);
     }
 }
