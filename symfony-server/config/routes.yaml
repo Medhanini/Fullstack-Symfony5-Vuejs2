@@ -17,3 +17,30 @@ product_create:
   path: /api/v1/products
   controller: App\Controller\ProductController:createAction
   methods: [POST]
+
+cart_show:
+  path: /api/v1/customers/{id}/cart
+  controller: App\Controller\CartController:showAction
+  methods: [GET]
+  requirements:
+    id: '\d+'
+
+cart_create:
+  path: /api/v1/customers/cart
+  controller: App\Controller\CartController:createAction
+  methods: [POST]
+
+cart_update:
+  path: /api/v1/customers/{customerId}/cart
+  controller: App\Controller\CartController:updateAction
+  methods: [PATCH]
+  requirements:
+    customerId: '\d+'
+
+cart_delete:
+  path: /api/v1/customers/{customerId}/cart/{cartId}
+  controller: App\Controller\CartController:deleteAction
+  methods: [DELETE]
+  requirements:
+    customerId: '\d+'
+    cartId: '\d+'
