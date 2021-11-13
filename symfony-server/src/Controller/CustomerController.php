@@ -22,39 +22,29 @@ class CustomerController extends AbstractApiController
     //         'path' => 'src/Controller/CustomerController.php',
     //     ]);
     // }
-    public function indexAction(Request $request):JsonResponse
+    public function indexAction(Request $request): Response
     {
         $customers = $this->getDoctrine()->getRepository(Customer::class)->findAll();
-        $formatted = [];
-        foreach ($customers as $customer) {
-            $formatted[] = [
-            'id' => $customer->getId(),
-            'email' => $customer->getEmail(),
-            'PhoneNumber' => $customer->getPhoneNumber(),
-            ];
-        }
 
-        return new JsonResponse($formatted);
+        return $this->respond($customers);
     }
-    public function createAction(Request $request):JsonResponse
+
+    public function createAction(Request $request): Response
     {
         $form = $this->buildForm(CustomerType::class);
+
         $form->handleRequest($request);
-        if(!$form->isSubmitted() || !$form->isValid()){
-            print'Form is not valid';
-            exit;
+
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->respond($form, Response::HTTP_BAD_REQUEST);
         }
+
         /** @var Customer $customer */
         $customer = $form->getData();
+
         $this->getDoctrine()->getManager()->persist($customer);
         $this->getDoctrine()->getManager()->flush();
-        $formatted = [];
-            $formatted[] = [
-            'id' => $customer->getId(),
-            'email' => $customer->getEmail(),
-            'PhoneNumber' => $customer->getPhoneNumber(),
-            ];
 
-        return new JsonResponse($formatted);
+        return $this->respond($customer);
     }
 }
