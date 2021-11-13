@@ -13,9 +13,8 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
             ->add('email',EmailType::class,[
-                'constraint' => [
+                'constraints' => [
                     new NotNull(),
                 ]
             ])

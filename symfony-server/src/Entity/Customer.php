@@ -18,11 +18,6 @@ class Customer
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
-     */
-    private $name;
-
-    /**
      * @ORM\Column(type="string", length=100)
      */
     private $email;
@@ -35,18 +30,6 @@ class Customer
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getEmail(): ?string
